@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+.container {
+  display: flex; /* or inline-flex */
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  align-items: felx-start;
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  gap: 10px;
+  align-items: center;
+}
+
+.option-box {
+    display: flex; /* or inline-flex */
+  flex-direction: row;
+  justify-content: left;
+  gap: 200px;
+  align-items: felx-start;
+}
+
+.option-box>div {
+    display: flex; /* or inline-flex */
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    align-items: felx-start;
+}
+
+h1{
+
+}
+
+form>input[type="number"] {
+  max-width: 250px;
+  min-height: 20px;
+}
+
+form>input[type="submit"] {
+  max-width: 290px;
+  min-height: 50px;
+  background: orange;
+}
+
+#input {
+  background: wheat;
+  font-size: 1em;
+}
+
+#output, #output2 {
+  background: powderblue;
+}
+
+.logo {
+    width: 250px;
+    height: 100px;
+    background: url(https://www.google.com/search?q=huggingface&source=lnms&tbm=isch&sa=X&ved=2ahUKEwj3qsO4zuL-AhVGUKQEHQbVDysQ_AUoAnoECAEQBA&biw=1848&bih=887&dpr=1#imgrc=fuqc4PgBmmKBaM);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+</style>
+</head>
+
+
+<body>
+<div class="main">
+<form method="POST" class="container">
+    <div class="header">
+        <div class="logo"></div>
+        <div><h1>Text summarization system</h1></div>
+    </div>
+
+    <textarea name="input-text" rows = "20" cols = "100"  width="700px" id="input"></textarea>
+    <label for="extractive">Summarization Type: </label>
+
+    <div class="option-box">
+        <div>
+            <div>
+                <input type="radio" name="options" id="extractive" value="extractive" checked>
+                <label for="extractive">Extractive</label>
+            </div>
+            <div>
+                <label for="ext-models">Choose a model:</label>
+                <select name="ext-models" id="ext-models">
+                    <option value="BERT">BERT</option>
+                    <option value="GPT2">GPT2</option>
+                    <option value="XLNet">XLNet</option>
+                </select>
+            </div>
+            <div>
+                <label for="sent-number" id="sent-number-label">Number of sentences: </label>
+                <input type="number" name="num-sentences" value="1" id="sent-number">
+            </div>
+        </div>
+        <div>
+            <div>
+                <input type="radio" name="options" id="abstractive" value="abstractive" >
+                <label for="abstractive">Abstractive</label>
+            </div>
+            <div>
+                <label for="abs-models">Choose a model:</label>
+                <select name="abs-models" id="abs-models">
+                    
+                    <option value="T5">T5</option>
+                    <option value="LED">LED</option>
+                    <option value="BART">BART</option>
+                    <option value="Pegasus">Pegasus</option>
+                   
+                   
+                    
+                </select>
+            </div>
+            <div>
+                <label for="word-count" id="sent-size-label">Minimum words: </label>
+                <input type="number" name="word-count" value="10" id="word-count">
+            </div>
+        </div>
+    </div>
+
+    <input type="submit">
+
+
+</form>
+<div>
+    <div>Extractive</div>
+    <textarea name="output-text" rows = "20" cols = "100"  width="700px" id="output" disabled="disabled"></textarea>
+    <div>Abstractive</div>
+    <textarea name="output-text2" rows = "20" cols = "100"  width="700px" id="output2" disabled="disabled"></textarea>
+</div>
+</div>
+
+
+
+
+
+<script>
+    $(document).ready(function() {
+        $('input[type=radio][name=options]').change(function() {
+            if (this.value == 'extractive') {
+                $("#sent-number").prop("disabled", false);
+                $("#sent-number-label").prop("disabled", false);
+                $("#stype").prop("disabled", false);
+                $("#C1").prop("disabled", false);
+                $("#stype").prop("disabled", false);
+                $("#C2").prop("disabled", false);
+
+                 $("#stype").prop("disabled", false);
+                $("#C3").prop("disabled", false);
+
+
+
+
+            }
+            else if (this.value == 'abstractive') {
+                $("#stype").prop("disabled", true);
+                $("#C1").prop("disabled", true);
+                $("#stype").prop("disabled", true);
+                $("#C2").prop("disabled", true);
+
+                 $("#stype").prop("disabled", true);
+                $("#C3").prop("disabled", true);
+
+
+
+
+            }
+        });
+
+        $("form").on("submit", function(event) {
+            event.preventDefault();
+	        let input = $("#input").val();
+	        let sentNumber = $("#sent-number").val();
+	        let wordCount = $("#word-count").val();
+	        let absModel = $("#abs-models").val();
+	        let extModel = $("#ext-models").val();
+            let type = $("input[type=radio][name=options]:checked").val();
+
+            $.ajax({
+                data: {
+                    input: input,
+                    sentNumber: sentNumber,
+                    wordCount: wordCount,
+                    absModel: absModel,
+                    extModel: extModel,
+                    type: type
+                },
+                type: "POST",
+                url: "/get",
+            }).done(function(data) {
+                if (type == "extractive")
+                    $("#output").val(data);
+                else
+                    $("#output2").val(data);
+            });
+
+	        event.preventDefault();
+        });
+    });
+</script>
+</body>
+
+</html>
