@@ -3,7 +3,7 @@ Text Summarization via Hugging Face with Flask API
 
 
 
-**Approaches**
+**Methods**
 
 - [x] Extractive: BERT, GPT2, XLNET
 - [x] Abstrative: BART, T5, Pegasus, LED
