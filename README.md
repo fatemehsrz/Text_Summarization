@@ -13,4 +13,4 @@ Text Summarization via Hugging Face with Flask API
 - [ ] For Extractive methods  number of sentences should be specified
 - [ ] For Abstractive methods minimum number of words should be specified
 
-![plot](./img.png)
+![plot](./img2.png)
