@@ -1,4 +1,4 @@
-# Text_Sumamarization
+# Text_Summarization
 Text Summarization via Hugging Face with Flask API
 
 
